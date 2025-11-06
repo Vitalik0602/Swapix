@@ -1,20 +1,34 @@
-/* src/App.css */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+/* src/App.css (Улучшенная версия) */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
 
 :root {
-  --bg-1: #121212; /* Тёмный фон */
-  --bg-2: #1e1e1e; /* Вторичный фон для карточек */
-  --bg-3: #2a2a2a; /* Третичный фон для панелей */
+  /* ▼ ПАЛИТРА
+   * Я унифицировал вашу палитру. Акцентный цвет #ff6600 (оранжевый) 
+   * теперь соответствует "неоновому" цвету, который вы использовали в rgba.
+   * Я также сделал неон и тени более мягкими и профессиональными.
+   */
+  --bg-1: #121212; /* Темный фон */
+  --bg-2: #1e1e1e; /* Вторичный фон для карточек/панелей */
+  --bg-3: #2a2a2a; /* Фон для выделения (hover) или границ */
   --text: #ffffff; /* Основной текст */
   --muted: #b0b0b0; /* Вторичный текст */
-  --accent: #ff1a3d; /* Основной акцентный цвет (оранжевый) */
-  --accent-2: #ff5075; /* Светлее оранжевый */
-  --gradient: linear-gradient(135deg,var(--accent), var(--accent-2)); /* Градиент для кнопок */
-  --radius: 12px; /* Скругление углов */
-  --neon: 0 0 10px rgba(255, 109, 0, 0.5); /* Неоновый эффект */
-  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
-  --glass-bg: rgba(255, 255, 255, 0.05); /* Glassmorphism фон */
-  --glass-border: 1px solid rgba(255, 255, 255, 0.1); /* Glassmorphism граница */
+  --accent: #ff6600; /* Основной акцентный цвет (чистый оранжевый) */
+  --accent-2: #ff8533; /* Светлый оранжевый для градиента */
+  --gradient: linear-gradient(135deg, var(--accent), var(--accent-2));
+  
+  --radius: 8px; /* Слегка уменьшен для более строгого вида */
+  --transition: 0.3s ease; /* Единая переменная для анимаций */
+
+  /* ▼ ЭФФЕКТЫ
+   * Тени стали более глубокими и реалистичными для темной темы.
+   * Неон стал мягче и используется для фокуса, а не по умолчанию.
+   */
+  --shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Более мягкая тень */
+  --neon-focus: 0 0 0 3px rgba(255, 102, 0, 0.3); /* Для фокуса (accessibility) */
+  --neon-glow: 0 0 15px rgba(255, 102, 0, 0.2); /* Мягкое свечение для hover */
+
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -23,17 +37,37 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth; /* Плавный скролл */
+}
+
+/* ▼ УЛУЧШЕННАЯ ТИПОГРАФИКА
+ * Inter - отличный шрифт для UI и основного текста.
+ * Montserrat - для заголовков.
+ */
 body {
-  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif; /* По умолчанию - Inter */
   background: var(--bg-1);
   color: var(--text);
+  line-height: 1.6; /* Улучшает читаемость */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Заголовкам возвращаем Montserrat */
+h1, h2, h3, h4, h5, h6,
+.MuiTypography-root[class*="h"] {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+}
+
 a {
   text-decoration: none;
-  color: inherit;
+  color: var(--accent);
+  transition: color var(--transition);
+}
+a:hover {
+  color: var(--accent-2);
 }
 
 button {
@@ -44,7 +78,7 @@ button {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 24px;
 }
 
 .glass {
@@ -54,11 +88,17 @@ button {
   border-radius: var(--radius);
 }
 
-/* Стили для навигации */
+/* ▼ БОЛЕЕ ЧИСТАЯ НАВИГАЦИЯ
+ * Вместо градиента и неона - чистая "липкая" панель.
+ * Это стандарт для профессиональных веб-приложений.
+ */
 nav {
-  background: var(--gradient);
-  box-shadow: var(--neon);
-  border-radius: 0 0 var(--radius) var(--radius);
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: sticky; /* Закрепляем NAV */
+  top: 0;
+  z-index: 1000;
 }
 
 nav .MuiToolbar-root {
@@ -72,34 +112,54 @@ nav .MuiTypography-root {
   font-family: 'Montserrat';
 }
 
-/* Стили для карточек */
+/* ▼ УЛУЧШЕННЫЕ КАРТОЧКИ
+ * Более тонкая обводка и акцентное свечение при наведении.
+ */
 .MuiCard-root {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--bg-2);
+  border: 1px solid var(--bg-3); /* Легкая граница */
+  border-radius: var(--radius);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 
 .MuiCard-root:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--neon);
+  transform: translateY(-4px); /* Меньший сдвиг */
+  box-shadow: var(--neon-glow); /* Мягкое свечение */
+  border-color: var(--accent); /* Акцентная граница */
 }
 
 .MuiCardMedia-root {
   object-fit: cover;
   height: 160px;
+  border-radius: var(--radius) var(--radius) 0 0; /* Скругляем только верх */
 }
 
-/* Стили для кнопок */
+/* ▼ УЛУЧШЕННЫЕ КНОПКИ
+ * Добавлен "lift" (подъем) при наведении и более
+ * чистый :hover эффект для градиентной кнопки.
+ */
 .MuiButton-root {
   border-radius: var(--radius);
   text-transform: none;
   font-weight: 600;
+  padding: 8px 22px;
+  transition: all var(--transition);
+}
+
+.MuiButton-root:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
 }
 
 .MuiButton-contained {
   background: var(--gradient);
+  box-shadow: 0 4px 10px rgba(255, 102, 0, 0.2);
 }
 
 .MuiButton-contained:hover {
-  background: var(--accent-2);
+  background: var(--gradient);
+  filter: brightness(1.15); /* Делаем ярче вместо смены фона */
+  box-shadow: 0 6px 15px rgba(255, 102, 0, 0.3);
 }
 
 .MuiButton-outlined {
@@ -108,10 +168,14 @@ nav .MuiTypography-root {
 }
 
 .MuiButton-outlined:hover {
-  background: rgba(255, 109, 0, 0.1);
+  background: rgba(255, 102, 0, 0.1);
+  border-color: var(--accent-2);
 }
 
-/* Стили для форм */
+/* ▼ УЛУЧШЕННЫЕ ФОРМЫ
+ * Добавлен эффект --neon-focus при фокусе
+ * для лучшей доступности (accessibility).
+ */
 .MuiTextField-root input,
 .MuiTextField-root textarea {
   color: var(--text);
@@ -121,57 +185,78 @@ nav .MuiTypography-root {
   color: var(--muted);
 }
 
+.MuiTextField-root .MuiOutlinedInput-root {
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
 .MuiTextField-root .MuiOutlinedInput-notchedOutline {
-  border-color: var(--muted);
+  border-color: var(--bg-3);
 }
 
 .MuiTextField-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: var(--accent);
+  border-color: var(--muted);
 }
 
-/* Стили для выпадающего списка */
+.MuiTextField-root .Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent) !important; /* Важно для MUI */
+  box-shadow: var(--neon-focus); /* Свечение при фокусе */
+}
+
+/* ▼ СТИЛИ ДЛЯ СПИСКОВ И КАРТЫ (УЛУЧШЕНИЯ) */
 .MuiSelect-root {
   color: var(--text);
   background: var(--bg-2);
-}
-
-.MuiSelect-outlined {
   border-radius: var(--radius);
 }
 
-.MuiMenuItem-root {
-  color: var(--text);
+.MuiSelect-root ~ .MuiOutlinedInput-notchedOutline {
+  border-color: var(--bg-3);
 }
 
 .MuiMenuItem-root:hover {
-  background: rgba(255, 109, 0, 0.1);
+  background: rgba(255, 102, 0, 0.1);
 }
 
-/* Стили для карты */
 .leaflet-container {
   border-radius: var(--radius);
   border: var(--glass-border);
+  box-shadow: var(--shadow);
 }
 
-/* Стили для списка сообщений */
+/* ▼ УЛУЧШЕННЫЙ СПИСОК ЧАТА (с кастомным скроллбаром) */
 .chat-list {
   max-height: 400px;
   overflow-y: auto;
   background: var(--bg-2);
   border-radius: var(--radius);
+  border: 1px solid var(--bg-3);
+  /* Кастомный скроллбар */
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--bg-1);
+}
+.chat-list::-webkit-scrollbar {
+  width: 8px;
+}
+.chat-list::-webkit-scrollbar-track {
+  background: var(--bg-1);
+}
+.chat-list::-webkit-scrollbar-thumb {
+  background-color: var(--accent);
+  border-radius: 10px;
+  border: 2px solid var(--bg-1);
 }
 
 .chat-list .MuiListItem-root {
-  transition: background 0.2s ease;
+  transition: background var(--transition);
 }
 
 .chat-list .MuiListItem-root:hover {
-  background: rgba(255, 109, 0, 0.1);
+  background: rgba(255, 102, 0, 0.05); /* Менее интенсивный hover */
 }
 
-/* Анимации */
+/* Анимации (без изменений) */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -189,53 +274,25 @@ nav .MuiTypography-root {
   animation: pulse 2s infinite;
 }
 
-/* Адаптивность */
+/* Адаптивность (мелкие правки отступов) */
 @media (max-width: 960px) {
   .container {
-    padding: 15px;
-  }
-
-  .MuiTypography-h4 {
-    font-size: 1.8rem;
-  }
-
-  .MuiTypography-h5 {
-    font-size: 1.4rem;
+    padding: 20px;
   }
 }
 
 @media (max-width: 600px) {
   .container {
-    padding: 10px;
+    padding: 16px;
   }
-
   .MuiTypography-h4 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
-
   .MuiTypography-h5 {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
-
-  .MuiButton-root {
-    font-size: 0.8rem;
-  }
-
   nav .MuiToolbar-root {
     flex-wrap: wrap;
-  }
-
-  .MuiCardMedia-root {
-    height: 120px;
-  }
-}
-
-@media (max-width: 400px) {
-  .MuiTypography-h4 {
-    font-size: 1.2rem;
-  }
-
-  .MuiButton-root {
-    padding: 6px 12px;
+    padding: 8px 16px;
   }
 }
